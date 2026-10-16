@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hubie Cube</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <style>
+        html, body { margin: 0; height: 100%; overflow: hidden; background: #111; color: #eee; font-family: monospace; }
+        /* Fills the whole window; Phaser scales the game to fit inside it, centered. */
+        #game-pane { width: 100vw; height: 100vh; height: 100dvh; }
+
+        /* ── Pause button — fixed top-left corner of the window ── */
+        #pause-btn {
+            position: fixed; top: 14px; left: 14px; z-index: 10;
+            background: #1a1a1a; color: #00ffcc; border: 2px solid #00ffcc;
+            padding: 8px 16px; font-family: monospace; font-weight: bold;
+            font-size: 14px; cursor: pointer; border-radius: 4px;
+        }
+        #pause-btn:hover { background: #00ffcc; color: #111; }
+        #pause-btn:disabled { opacity: 0.35; cursor: default; background: #1a1a1a; color: #666; border-color: #666; }
+
+        /* ── Shared modal backdrop, used by both the pause menu and the win screen ── */
+        .modal-backdrop {
+            display: none; position: fixed; inset: 0; z-index: 100;
+            background: rgba(0, 0, 0, 0.72);
+            align-items: center; justify-content: center;
+        }
+        .modal-backdrop.visible { display: flex; }
+        .modal-box {
+            background: #1a1a1a; border: 2px solid #00ffcc; border-radius: 8px;
+            padding: 32px 40px; text-align: center; min-width: 260px; max-width: 90vw; box-sizing: border-box;
+            font-family: monospace; color: #eee; position: relative;
+        }
+        .modal-box h2 { margin: 0 0 20px 0; color: #00ffcc; }
+        .modal-btn {
+            display: block; width: 100%; margin: 10px 0; padding: 12px 20px;
+            background: #333; color: #00ffcc; border: 1px solid #00ffcc;
+            font-family: monospace; font-weight: bold; font-size: 15px;
+            cursor: pointer; border-radius: 4px;
+        }
+        .modal-btn:hover { background: #00ffcc; color: #111; }
+        .modal-close {
+            position: absolute; top: 8px; right: 12px; cursor: pointer;
+            color: #888; font-size: 18px; font-weight: bold; user-select: none;
+        }
+        .modal-close:hover { color: #00ffcc; }
+    </style>
+</head>
+<body>
+
+    <div id="game-pane">
+        <button id="pause-btn" onclick="openPauseMenu()">Pause</button>
+    </div>
+
+    <!-- ═══ Pause modal: Restart, closable without picking it ═══ -->
+    <div id="pause-modal" class="modal-backdrop">
+        <div class="modal-box">
+            <span class="modal-close" onclick="closePauseMenu()">&times;</span>
+            <h2>Paused</h2>
+            <button class="modal-btn" onclick="pauseMenuRestart()">Restart</button>
+        </div>
+    </div>
+
+    <!-- ═══ Win overlay: shown once the cube is fully solved, blocks all play input ═══ -->
+    <div id="win-overlay" class="modal-backdrop">
+        <div class="modal-box">
+            <h2>Cube Solved!</h2>
+            <button class="modal-btn" onclick="location.reload()">Play</button>
+        </div>
+    </div>
+
+    <script src="engine.js"></script>
+    <script src="SoundEngine.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
